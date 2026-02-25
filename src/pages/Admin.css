@@ -129,6 +129,69 @@
   background: rgba(77, 171, 247, 0.3);
 }
 
+.btn-end-event {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  background: rgba(233, 69, 96, 0.3);
+  border: 1px solid #e94560;
+  border-radius: 0.5rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-end-event:hover {
+  background: rgba(233, 69, 96, 0.5);
+}
+
+.modal-warning {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  color: #e94560;
+  font-weight: 500;
+}
+
+.confirm-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.confirm-input:focus {
+  outline: none;
+  border-color: #e94560;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-confirm-end {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: #e94560;
+  border: none;
+  border-radius: 0.5rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-confirm-end:hover:not(:disabled) {
+  background: #ff6b6b;
+}
+
+.btn-confirm-end:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;

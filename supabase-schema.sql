@@ -13,3 +13,4 @@ create table if not exists scout_data (
 -- Optional: Create policies (required if RLS is enabled)
 -- create policy "Allow anonymous insert" on scout_data for insert with (true);
 -- create policy "Allow anonymous select" on scout_data for select with (true);  -- needed for Admin dashboard
+-- create policy "Allow anonymous delete" on scout_data for delete with (true);   -- needed for End Event / Begin Event wipe

@@ -13,7 +13,7 @@ import {
   Cell,
   Legend,
 } from 'recharts';
-import { getAllScoutData, type ScoutDataRow, type AllianceScoutData, type RobotScoutData } from '../lib/db';
+import { getAllScoutData, clearAllScoutData, type ScoutDataRow, type AllianceScoutData, type RobotScoutData } from '../lib/db';
 import { useApp } from '../context/AppContext';
 import { fetchMichiganEvents, fetchEventTeams } from '../lib/tba';
 import type { TBAEvent } from '../lib/tba';
@@ -114,6 +114,8 @@ export default function Admin() {
   const [tab, setTab] = useState<Tab>('overview');
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [beginEventModal, setBeginEventModal] = useState(false);
+  const [endEventModal, setEndEventModal] = useState(false);
+  const [endEventConfirm, setEndEventConfirm] = useState('');
   const [michiganEvents, setMichiganEvents] = useState<TBAEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(false);
   const [eventsError, setEventsError] = useState<string | null>(null);
@@ -157,11 +159,30 @@ export default function Admin() {
 
   const selectEvent = async (event: TBAEvent) => {
     try {
+      await clearAllScoutData();
       const teams = await fetchEventTeams(event.key);
       const teamNumbers = teams.map((t) => String(t.team_number));
       setEventInfo({ key: event.key, name: event.name, teamNumbers });
-      localStorage.removeItem('rebuilt_scout_data');
+      setData([]);
       setBeginEventModal(false);
+    } catch (e) {
+      setEventsError(String(e));
+    }
+  };
+
+  const openEndEvent = () => {
+    setEndEventModal(true);
+    setEndEventConfirm('');
+  };
+
+  const confirmEndEvent = async () => {
+    if (endEventConfirm !== 'CONFIRM') return;
+    try {
+      await clearAllScoutData();
+      setEventInfo(null);
+      setData([]);
+      setEndEventModal(false);
+      setEndEventConfirm('');
     } catch (e) {
       setEventsError(String(e));
     }
@@ -216,9 +237,15 @@ export default function Admin() {
         <h1>Admin Dashboard</h1>
         <p className="count">{data.length} scout records</p>
         {eventInfo && <span className="event-badge">Event: {eventInfo.name}</span>}
-        <button type="button" className="btn-begin-event" onClick={openBeginEvent}>
-          Begin Event
-        </button>
+        {eventInfo ? (
+          <button type="button" className="btn-end-event" onClick={openEndEvent}>
+            End Event
+          </button>
+        ) : (
+          <button type="button" className="btn-begin-event" onClick={openBeginEvent}>
+            Begin Event
+          </button>
+        )}
         <button type="button" className="logout" onClick={handleLogout}>
           Log out
         </button>
@@ -227,11 +254,41 @@ export default function Admin() {
         </button>
       </header>
 
+      {endEventModal && (
+        <div className="modal-overlay" onClick={() => setEndEventModal(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2>End Event</h2>
+            <p className="modal-warning">Are you absolutely sure? This will clear all scout data and unlock event selection.</p>
+            <p className="modal-hint">Type CONFIRM to proceed:</p>
+            <input
+              type="text"
+              value={endEventConfirm}
+              onChange={(e) => setEndEventConfirm(e.target.value)}
+              placeholder="CONFIRM"
+              className="confirm-input"
+            />
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="btn-confirm-end"
+                onClick={confirmEndEvent}
+                disabled={endEventConfirm !== 'CONFIRM'}
+              >
+                End Event
+              </button>
+              <button type="button" className="modal-close" onClick={() => setEndEventModal(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {beginEventModal && (
         <div className="modal-overlay" onClick={() => setBeginEventModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2>Begin Event</h2>
-            <p className="modal-hint">Select a Michigan event. Teams will be restricted to this event.</p>
+            <p className="modal-hint">Select a Michigan event. All existing scout data will be wiped and teams will be restricted to this event.</p>
             {eventsLoading && <p>Loading events...</p>}
             {eventsError && <p className="error">{eventsError}</p>}
             <div className="event-list">

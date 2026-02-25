@@ -77,6 +77,23 @@ export function getLocalScoutData(): ScoutData[] {
   return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 }
 
+export async function clearAllScoutData(): Promise<void> {
+  localStorage.removeItem(STORAGE_KEY);
+
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (supabaseUrl && supabaseKey) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      await supabase.from('scout_data').delete().gte('created_at', '1970-01-01');
+    } catch (e) {
+      console.error('Supabase clear error:', e);
+    }
+  }
+}
+
 export interface ScoutDataRow {
   id?: string;
   data: ScoutData;
