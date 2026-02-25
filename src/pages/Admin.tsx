@@ -104,9 +104,7 @@ function computeRankings(rows: ScoutDataRow[]): Map<string, TeamStats> {
 
 export default function Admin() {
   const { eventInfo, setEventInfo } = useApp();
-  const [authenticated, setAuthenticated] = useState(() =>
-    sessionStorage.getItem('admin_authenticated') === 'true'
-  );
+  const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [data, setData] = useState<ScoutDataRow[]>([]);
@@ -133,7 +131,6 @@ export default function Admin() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === ADMIN_PASSWORD) {
-      sessionStorage.setItem('admin_authenticated', 'true');
       setAuthenticated(true);
       setError('');
     } else {
@@ -142,7 +139,6 @@ export default function Admin() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('admin_authenticated');
     setAuthenticated(false);
     setPassword('');
   };
