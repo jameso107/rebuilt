@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import type { MatchSetup } from '../lib/db';
 import './MatchSetup.css';
@@ -63,6 +63,7 @@ export default function MatchSetup() {
         <h1>Match Setup</h1>
         <p className="scorer">
           Scoring as: {user?.firstName} {user?.lastInitial}.
+          <Link to="/admin" className="admin-link">Admin</Link>
           <button
             type="button"
             className="btn-signout"

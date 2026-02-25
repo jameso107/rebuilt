@@ -4,6 +4,7 @@ import SignIn from './pages/SignIn';
 import MatchSetup from './pages/MatchSetup';
 import AllianceScout from './pages/AllianceScout';
 import RobotScout from './pages/RobotScout';
+import Admin from './pages/Admin';
 import './App.css';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -44,6 +45,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

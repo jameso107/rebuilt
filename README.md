@@ -10,6 +10,7 @@ A scouting app for FIRST Robotics teams. Runs as a web app and can be installed 
 - **Individual robot mode**: Tickers for cross bump, cross tunnel, passing cycles; press-and-hold to record shooting time and scoring cycles (with average cycle time)
 - **Comments** on every scout
 - **Database**: Supabase (optional) or localStorage fallback
+- **Admin dashboard**: Visualizations, rankings, and individual team stats (password: `107107`)
 
 ## Quick Start (Web)
 

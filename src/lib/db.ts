@@ -74,3 +74,37 @@ function saveToLocalStorage(data: ScoutData): void {
 export function getLocalScoutData(): ScoutData[] {
   return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 }
+
+export interface ScoutDataRow {
+  id?: string;
+  data: ScoutData;
+  created_at?: string;
+}
+
+export async function getAllScoutData(): Promise<ScoutDataRow[]> {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (supabaseUrl && supabaseKey) {
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const { data, error } = await supabase
+      .from('scout_data')
+      .select('id, data, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Supabase fetch error:', error);
+      return getLocalScoutData().map((d) => ({ data: d, created_at: new Date().toISOString() }));
+    }
+
+    return (data || []).map((row) => ({
+      id: row.id,
+      data: row.data as ScoutData,
+      created_at: row.created_at,
+    }));
+  }
+
+  return getLocalScoutData().map((d) => ({ data: d, created_at: new Date().toISOString() }));
+}

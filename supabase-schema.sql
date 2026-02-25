@@ -10,5 +10,6 @@ create table if not exists scout_data (
 -- Optional: Enable Row Level Security if you want to restrict access
 -- alter table scout_data enable row level security;
 
--- Optional: Create a policy to allow anonymous inserts (for scouting without auth)
+-- Optional: Create policies (required if RLS is enabled)
 -- create policy "Allow anonymous insert" on scout_data for insert with (true);
+-- create policy "Allow anonymous select" on scout_data for select with (true);  -- needed for Admin dashboard

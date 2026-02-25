@@ -22,6 +22,16 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+.admin-link {
+  margin-left: 0.75rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.admin-link:hover {
+  color: #e94560;
+}
+
 .btn-signout {
   margin-left: 0.5rem;
   padding: 0.2rem 0.5rem;
