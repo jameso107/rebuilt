@@ -1,0 +1,88 @@
+.sign-in {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.sign-in-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 360px;
+}
+
+.sign-in-card h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+}
+
+.sign-in-card .subtitle {
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.sign-in-card .input-group {
+  margin-bottom: 1rem;
+}
+
+.sign-in-card label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sign-in-card input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.sign-in-card input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.sign-in-card input:focus {
+  outline: none;
+  border-color: #e94560;
+  box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.3);
+}
+
+.sign-in-card .btn-primary {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: #e94560;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sign-in-card .btn-primary:hover {
+  background: #ff6b6b;
+}
+
+.sign-in-card .btn-primary:active {
+  transform: scale(0.98);
+}

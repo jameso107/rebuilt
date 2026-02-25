@@ -1,0 +1,187 @@
+.match-setup {
+  min-height: 100vh;
+  padding: 1.5rem;
+  padding-bottom: 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.match-setup header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.match-setup h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.match-setup .scorer {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-signout {
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0.35rem;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.btn-signout:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.alliances {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.alliance {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.alliance.red h2 {
+  color: #ff6b6b;
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.alliance.blue h2 {
+  color: #4dabf7;
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.alliance input {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.alliance input.invalid {
+  border-color: #e94560;
+}
+
+.alliance input:last-child {
+  margin-bottom: 0;
+}
+
+.watch-mode {
+  margin-bottom: 1.5rem;
+}
+
+.watch-mode h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.mode-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.radio-card {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+.radio-card input {
+  margin-right: 0.75rem;
+  accent-color: #e94560;
+}
+
+.radio-card:has(input:checked) {
+  border-color: #e94560;
+  background: rgba(233, 69, 96, 0.15);
+}
+
+.alliance-select,
+.robot-select {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0.5rem;
+}
+
+.alliance-select label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 1rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+.alliance-select input {
+  margin-right: 0.5rem;
+  accent-color: #e94560;
+}
+
+.robot-select label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.robot-select select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-begin {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  background: #e94560;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-begin:hover:not(:disabled) {
+  background: #ff6b6b;
+}
+
+.btn-begin:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-begin:active:not(:disabled) {
+  transform: scale(0.98);
+}
