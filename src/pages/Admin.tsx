@@ -14,6 +14,10 @@ import {
   Legend,
 } from 'recharts';
 import { getAllScoutData, type ScoutDataRow, type AllianceScoutData, type RobotScoutData } from '../lib/db';
+import { useApp } from '../context/AppContext';
+import { fetchMichiganEvents, fetchEventTeams } from '../lib/tba';
+import type { TBAEvent } from '../lib/tba';
+import TeamFocusTab from '../components/TeamFocusTab';
 import './Admin.css';
 
 const ADMIN_PASSWORD = '107107';
@@ -99,6 +103,7 @@ function computeRankings(rows: ScoutDataRow[]): Map<string, TeamStats> {
 }
 
 export default function Admin() {
+  const { eventInfo, setEventInfo } = useApp();
   const [authenticated, setAuthenticated] = useState(() =>
     sessionStorage.getItem('admin_authenticated') === 'true'
   );
@@ -108,6 +113,10 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>('overview');
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+  const [beginEventModal, setBeginEventModal] = useState(false);
+  const [michiganEvents, setMichiganEvents] = useState<TBAEvent[]>([]);
+  const [eventsLoading, setEventsLoading] = useState(false);
+  const [eventsError, setEventsError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -134,6 +143,28 @@ export default function Admin() {
     sessionStorage.removeItem('admin_authenticated');
     setAuthenticated(false);
     setPassword('');
+  };
+
+  const openBeginEvent = () => {
+    setBeginEventModal(true);
+    setEventsError(null);
+    setEventsLoading(true);
+    fetchMichiganEvents()
+      .then(setMichiganEvents)
+      .catch((e) => setEventsError(String(e)))
+      .finally(() => setEventsLoading(false));
+  };
+
+  const selectEvent = async (event: TBAEvent) => {
+    try {
+      const teams = await fetchEventTeams(event.key);
+      const teamNumbers = teams.map((t) => String(t.team_number));
+      setEventInfo({ key: event.key, name: event.name, teamNumbers });
+      localStorage.removeItem('rebuilt_scout_data');
+      setBeginEventModal(false);
+    } catch (e) {
+      setEventsError(String(e));
+    }
   };
 
   if (!authenticated) {
@@ -184,6 +215,10 @@ export default function Admin() {
       <header>
         <h1>Admin Dashboard</h1>
         <p className="count">{data.length} scout records</p>
+        {eventInfo && <span className="event-badge">Event: {eventInfo.name}</span>}
+        <button type="button" className="btn-begin-event" onClick={openBeginEvent}>
+          Begin Event
+        </button>
         <button type="button" className="logout" onClick={handleLogout}>
           Log out
         </button>
@@ -191,6 +226,33 @@ export default function Admin() {
           ← Back to Scouting
         </button>
       </header>
+
+      {beginEventModal && (
+        <div className="modal-overlay" onClick={() => setBeginEventModal(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Begin Event</h2>
+            <p className="modal-hint">Select a Michigan event. Teams will be restricted to this event.</p>
+            {eventsLoading && <p>Loading events...</p>}
+            {eventsError && <p className="error">{eventsError}</p>}
+            <div className="event-list">
+              {michiganEvents.map((ev) => (
+                <button
+                  key={ev.key}
+                  type="button"
+                  className="event-item"
+                  onClick={() => selectEvent(ev)}
+                >
+                  <span className="event-name">{ev.name}</span>
+                  <span className="event-dates">{ev.start_date} – {ev.end_date}</span>
+                </button>
+              ))}
+            </div>
+            <button type="button" className="modal-close" onClick={() => setBeginEventModal(false)}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       <nav className="tabs">
         {(['overview', 'rankings', 'teams', 'raw'] as const).map((t) => (
@@ -327,6 +389,11 @@ export default function Admin() {
               {selectedTeamStats && (
                 <div className="team-detail">
                   <h3>Team {selectedTeamStats.team}</h3>
+                  <TeamFocusTab
+                    teamNumber={selectedTeamStats.team}
+                    eventKey={eventInfo?.key ?? null}
+                    scoutData={data}
+                  />
                   <div className="stat-grid">
                     <div className="stat-box">
                       <span className="stat-label">Alliance rank points</span>

@@ -6,6 +6,8 @@ export interface MatchSetup {
   watchMode: 'alliance' | 'robot';
   alliance?: 'red' | 'blue';
   robotNumber?: string;
+  matchNumber?: string; // e.g. Q12
+  eventKey?: string;
 }
 
 export interface AllianceScoutData {

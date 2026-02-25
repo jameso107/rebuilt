@@ -16,6 +16,12 @@
   color: #fff;
 }
 
+.match-setup .event-badge {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: #4dabf7;
+}
+
 .match-setup .scorer {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
@@ -73,7 +79,30 @@
   font-size: 1rem;
 }
 
-.alliance input {
+.match-number {
+  margin-bottom: 1rem;
+}
+
+.match-number label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.match-number input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.alliance input,
+.alliance select {
   display: block;
   width: 100%;
   margin-bottom: 0.5rem;
@@ -86,11 +115,13 @@
   box-sizing: border-box;
 }
 
-.alliance input.invalid {
+.alliance input.invalid,
+.alliance select.invalid {
   border-color: #e94560;
 }
 
-.alliance input:last-child {
+.alliance input:last-child,
+.alliance select:last-child {
   margin-bottom: 0;
 }
 

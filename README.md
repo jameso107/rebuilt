@@ -11,6 +11,7 @@ A scouting app for FIRST Robotics teams. Runs as a web app and can be installed 
 - **Comments** on every scout
 - **Database**: Supabase (optional) or localStorage fallback
 - **Admin dashboard**: Visualizations, rankings, and individual team stats (password: `107107`)
+- **The Blue Alliance integration**: Begin Event (Michigan events), event team restriction, match numbers (QXX), OPR, climb data, and team photos in team focus tab
 
 ## Quick Start (Web)
 
@@ -39,6 +40,19 @@ Deploy the `dist/` folder to any static host (Vercel, Netlify, GitHub Pages, etc
 5. Name it (e.g. "Scouting") and tap **Add**.
 
 The app will open in standalone mode (no browser UI) and work like a native app. It works offline after the first load.
+
+## The Blue Alliance (TBA) Setup
+
+1. Get an API key from [thebluealliance.com/account](https://www.thebluealliance.com/account) → Read API Keys.
+2. Add to `.env`:
+   ```
+   VITE_TBA_API_KEY=your-tba-api-key
+   ```
+
+With TBA configured:
+- **Begin Event** in Admin fetches Michigan (FIM) events; selecting one restricts match setup to that event's teams and clears local scout data.
+- **Match number** (e.g. Q12) on match setup links scouts to TBA match data.
+- **Team focus tab** shows OPR, climb info from TBA matches, and team avatar when available.
 
 ## Database Setup (Supabase)
 
