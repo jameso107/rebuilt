@@ -100,6 +100,85 @@ export interface ScoutDataRow {
   created_at?: string;
 }
 
+export interface EventInfo {
+  key: string;
+  name: string;
+  teamNumbers: string[];
+}
+
+export async function getCurrentEvent(): Promise<EventInfo | null> {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (supabaseUrl && supabaseKey) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      const { data, error } = await supabase
+        .from('current_event')
+        .select('event_key, event_name, team_numbers')
+        .eq('id', 1)
+        .maybeSingle();
+
+      if (!error && data) {
+        return {
+          key: data.event_key,
+          name: data.event_name,
+          teamNumbers: data.team_numbers as string[],
+        };
+      }
+    } catch (e) {
+      console.error('getCurrentEvent error:', e);
+    }
+  }
+
+  const stored = localStorage.getItem('rebuilt_event');
+  return stored ? JSON.parse(stored) : null;
+}
+
+export async function setCurrentEvent(info: EventInfo): Promise<void> {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (supabaseUrl && supabaseKey) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      await supabase.from('current_event').upsert(
+        {
+          id: 1,
+          event_key: info.key,
+          event_name: info.name,
+          team_numbers: info.teamNumbers,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'id' }
+      );
+    } catch (e) {
+      console.error('setCurrentEvent error:', e);
+    }
+  }
+
+  localStorage.setItem('rebuilt_event', JSON.stringify(info));
+}
+
+export async function clearCurrentEvent(): Promise<void> {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (supabaseUrl && supabaseKey) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      await supabase.from('current_event').delete().eq('id', 1);
+    } catch (e) {
+      console.error('clearCurrentEvent error:', e);
+    }
+  }
+
+  localStorage.removeItem('rebuilt_event');
+}
+
 export async function getAllScoutData(): Promise<ScoutDataRow[]> {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;

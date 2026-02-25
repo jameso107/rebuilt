@@ -1,16 +1,12 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { MatchSetup } from '../lib/db';
+import { getCurrentEvent, setCurrentEvent, clearCurrentEvent } from '../lib/db';
+import type { EventInfo } from '../lib/db';
 
 interface User {
   firstName: string;
   lastInitial: string;
-}
-
-export interface EventInfo {
-  key: string;
-  name: string;
-  teamNumbers: string[];
 }
 
 interface AppContextType {
@@ -19,12 +15,11 @@ interface AppContextType {
   matchSetup: MatchSetup | null;
   setMatchSetup: (setup: MatchSetup | null) => void;
   eventInfo: EventInfo | null;
-  setEventInfo: (info: EventInfo | null) => void;
+  setEventInfo: (info: EventInfo | null) => Promise<void>;
+  eventLoading: boolean;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
-
-const EVENT_STORAGE_KEY = 'rebuilt_event';
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => {
@@ -32,17 +27,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return stored ? JSON.parse(stored) : null;
   });
   const [matchSetup, setMatchSetup] = useState<MatchSetup | null>(null);
-  const [eventInfo, setEventInfo] = useState<EventInfo | null>(() => {
-    const stored = localStorage.getItem(EVENT_STORAGE_KEY);
-    return stored ? JSON.parse(stored) : null;
-  });
+  const [eventInfo, setEventInfoState] = useState<EventInfo | null>(null);
+  const [eventLoading, setEventLoading] = useState(true);
 
-  const setEventInfoWithStorage = (info: EventInfo | null) => {
-    setEventInfo(info);
+  useEffect(() => {
+    const load = () =>
+      getCurrentEvent().then((info) => {
+        setEventInfoState(info);
+        setEventLoading(false);
+      });
+    load();
+    const interval = setInterval(load, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const setEventInfo = async (info: EventInfo | null) => {
+    setEventInfoState(info);
     if (info) {
-      localStorage.setItem(EVENT_STORAGE_KEY, JSON.stringify(info));
+      await setCurrentEvent(info);
     } else {
-      localStorage.removeItem(EVENT_STORAGE_KEY);
+      await clearCurrentEvent();
     }
   };
 
@@ -54,7 +58,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         matchSetup,
         setMatchSetup,
         eventInfo,
-        setEventInfo: setEventInfoWithStorage,
+        setEventInfo,
+        eventLoading,
       }}
     >
       {children}

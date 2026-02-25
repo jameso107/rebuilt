@@ -162,7 +162,7 @@ export default function Admin() {
       await clearAllScoutData();
       const teams = await fetchEventTeams(event.key);
       const teamNumbers = teams.map((t) => String(t.team_number));
-      setEventInfo({ key: event.key, name: event.name, teamNumbers });
+      await setEventInfo({ key: event.key, name: event.name, teamNumbers });
       setData([]);
       setBeginEventModal(false);
     } catch (e) {
@@ -179,7 +179,7 @@ export default function Admin() {
     if (endEventConfirm !== 'CONFIRM') return;
     try {
       await clearAllScoutData();
-      setEventInfo(null);
+      await setEventInfo(null);
       setData([]);
       setEndEventModal(false);
       setEndEventConfirm('');
