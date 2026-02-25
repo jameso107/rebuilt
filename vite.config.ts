@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+      includeAssets: ['107-logo.jpg'],
       manifest: {
         name: 'Rebuilt Scouting',
         short_name: 'Scouting',
@@ -20,9 +20,9 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/vite.svg',
-            sizes: 'any',
-            type: 'image/svg+xml'
+            src: '/107-logo.jpg',
+            sizes: '192x192',
+            type: 'image/jpeg'
           }
         ]
       }
